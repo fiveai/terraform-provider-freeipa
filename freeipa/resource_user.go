@@ -3,7 +3,6 @@ package freeipa
 import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"log"
-	"errors"
 )
 
 const (
@@ -25,7 +24,7 @@ func resourceUser() *schema.Resource {
 		Exists: resourceUserExists,
 
 		Importer: &schema.ResourceImporter{
-			State: resourceUserImport,
+			State: schema.ImportStatePassthrough,
 		},
 
 		Schema: map[string]*schema.Schema{
@@ -64,10 +63,6 @@ func resourceUser() *schema.Resource {
 			},
 		},
 	}
-}
-
-func resourceUserImport(d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
-	return nil, errors.New("not implemented")
 }
 
 func resourceUserCreate(d *schema.ResourceData, m interface{}) error {

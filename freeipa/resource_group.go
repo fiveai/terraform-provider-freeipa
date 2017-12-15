@@ -3,7 +3,6 @@ package freeipa
 import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"log"
-	"errors"
 )
 
 const (
@@ -21,7 +20,7 @@ func resourceGroup() *schema.Resource {
 		Exists: resourceGroupExists,
 
 		Importer: &schema.ResourceImporter{
-			State: resourceGroupImport,
+			State: schema.ImportStatePassthrough,
 		},
 
 		Schema: map[string]*schema.Schema{
@@ -41,10 +40,6 @@ func resourceGroup() *schema.Resource {
 			},
 		},
 	}
-}
-
-func resourceGroupImport(d *schema.ResourceData, m interface{}) ([]*schema.ResourceData, error) {
-	return nil, errors.New("not implemented")
 }
 
 func resourceGroupCreate(d *schema.ResourceData, m interface{}) error {
