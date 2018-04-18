@@ -56,7 +56,7 @@ func resourceUser() *schema.Resource {
 				Optional: true,
 			},
 			userSchemaGroups: &schema.Schema{
-				Type:     schema.TypeList,
+				Type:     schema.TypeSet,
 				Optional: true,
 				Computed: true,
 				Elem:     &schema.Schema{Type: schema.TypeString},
