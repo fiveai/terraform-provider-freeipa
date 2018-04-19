@@ -1,11 +1,19 @@
 language: go
 go:
-  - "1.10"
+- '1.10'
 
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y libkrb5-dev
+- sudo apt-get -qq update
+- sudo apt-get install -y libkrb5-dev
 
 script:
-  - go build
+- go build
+- mv terraform-provider-freeipa terraform-provider-freeipa_$TRAVIS_TAG
 
+deploy:
+  provider: releases
+  api_key: $GITHUB_TOKEN
+  file: terraform-provider-freeipa_$TRAVIS_TAG
+  skip_cleanup: true
+  on:
+    tags: true
