@@ -74,7 +74,7 @@ func resourceUserCreate(d *schema.ResourceData, m interface{}) error {
 	first := d.Get(userSchemaFirstName).(string)
 	last := d.Get(userSchemaLastName).(string)
 
-	options := 	map[string]interface{}{}
+	options := map[string]interface{}{}
 
 	uidNumber, ok := d.GetOk(userSchemaUidNumber)
 	if ok {
@@ -105,14 +105,17 @@ func resourceUserCreate(d *schema.ResourceData, m interface{}) error {
 
 	groupsInterface, ok := d.GetOk(userSchemaGroups)
 	if ok {
-		groups := make([]string, len(groupsInterface.([]interface{})))
-		for i, d := range groupsInterface.([]interface{}) {
-			groups[i] = d.(string)
-		}
+		groupsRaw := groupsInterface.(*schema.Set)
+		if groupsRaw.Len() > 0 {
+			groups := make([]string, groupsRaw.Len())
+			for i, d := range groupsRaw.List() {
+				groups[i] = d.(string)
+			}
 
-		err = c.client.UserSyncGroups(uid, groups)
-		if err != nil {
-			return err
+			err = c.client.UserSyncGroups(uid, groups)
+			if err != nil {
+				return err
+			}
 		}
 	}
 
@@ -149,7 +152,7 @@ func resourceUserRead(d *schema.ResourceData, m interface{}) error {
 	}
 
 	err = d.Set(userSchemaLastName, rec.Last)
-	if err != nil{
+	if err != nil {
 		return err
 	}
 
@@ -231,8 +234,9 @@ func resourceUserUpdate(d *schema.ResourceData, m interface{}) error {
 	if d.HasChange(userSchemaGroups) {
 		_, newValueInterface := d.GetChange(userSchemaGroups)
 
-		newValue := make([]string, len(newValueInterface.([]interface{})))
-		for i, d := range newValueInterface.([]interface{}) {
+		groupsRaw := newValueInterface.(*schema.Set)
+		newValue := make([]string, groupsRaw.Len())
+		for i, d := range groupsRaw.List() {
 			newValue[i] = d.(string)
 		}
 
