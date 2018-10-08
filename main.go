@@ -3,7 +3,7 @@ package main
 import (
 	"github.com/hashicorp/terraform/plugin"
 	"github.com/hashicorp/terraform/terraform"
-	"github.com/tustvold/terraform-provider-freeipa/freeipa"
+	"github.com/fiveai/terraform-provider-freeipa/freeipa"
 )
 
 func main() {

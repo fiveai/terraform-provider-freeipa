@@ -1,7 +1,7 @@
 package freeipa
 
 import (
-	"github.com/tustvold/goipa"
+	"github.com/fiveai/goipa"
 )
 
 type Config struct {
