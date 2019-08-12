@@ -1,14 +1,14 @@
 package freeipa
 
 import (
-	"github.com/fiveai/goipa"
+	ipa "github.com/fiveai/goipa"
 )
 
 type Config struct {
-	Host       string
-	Username   string
-	Password   string
-	BaseDN     string
+	Host     string
+	Username string
+	Password string
+	BaseDN   string
 }
 
 type Connection struct {

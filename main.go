@@ -1,9 +1,9 @@
 package main
 
 import (
+	"github.com/fiveai/terraform-provider-freeipa/freeipa"
 	"github.com/hashicorp/terraform/plugin"
 	"github.com/hashicorp/terraform/terraform"
-	"github.com/fiveai/terraform-provider-freeipa/freeipa"
 )
 
 func main() {
