@@ -3,6 +3,9 @@ VERSION := $(shell git describe --tags --always --dirty="-dev")
 
 # Currently arm and mac builds broken based on the cross compile dependencies.
 
+.PHONY: all
+all: dist/terraform-provider-freeipa_$(VERSION)-darwin-amd64 dist/terraform-provider-freeipa_$(VERSION)-linux-amd64
+
 release: clean github-release dist
 	github-release release \
 		--user fiveai \
@@ -38,27 +41,25 @@ release: clean github-release dist
 	#         --security-token $$GITHUB_TOKEN
 
 	# macOS
-	# github-release upload \
-	#         --user fiveai \
-	#         --repo terraform-provider-k8s \
-	#         --tag $(VERSION) \
-	#         --name terraform-provider-k8s_$(VERSION)-darwin-amd64 \
-	#         --file terraform-provider-k8s_$(VERSION)-darwin-amd64 \
-	#         --security-token $$GITHUB_TOKEN
+	github-release upload \
+	        --user fiveai \
+	        --repo terraform-provider-k8s \
+	        --tag $(VERSION) \
+	        --name terraform-provider-k8s_$(VERSION)-darwin-amd64 \
+	        --file terraform-provider-k8s_$(VERSION)-darwin-amd64 \
+	        --security-token $$GITHUB_TOKEN
 
-dist: goget
-	# GNU/Linux - X86
-	$(GOVARS) GOOS=linux GOARCH=amd64 go build -o terraform-provider-freeipa_$(VERSION)-linux-amd64
-
+dist:
+	mkdir -p dist
 	# arm
 	# $(GOVARS) GOOS=linux CC=arm-linux-gnueabi-gcc GOARCH=arm go build -o terraform-provider-k8s_$(VERSION)-linux-arm
 	# $(GOVARS) GOOS=linux GOARCH=arm64 go build -o terraform-provider-k8s_$(VERSION)-linux-arm64
 
-	# macOS
-	# $(GOVARS) GOOS=darwin GOARCH=amd64 go build -o terraform-provider-k8s_$(VERSION)-darwin-amd64
+dist/terraform-provider-freeipa_$(VERSION)-darwin-amd64: | dist
+	GOOS=darwin GOARCH=amd64 GO111MODULE=on go build $(LDFLAGS) -o $@
 
-goget:
-	go get
+dist/terraform-provider-freeipa_$(VERSION)-linux-amd64: | dist
+	GOOS=linux GOARCH=amd64 GO111MODULE=on go build $(LDFLAGS) -o $@
 
 clean:
 	rm -rf terraform-provider-freeipa*
